@@ -5,6 +5,7 @@ A lightweight Javascript library used to handle the input events of mouse, keybo
 
 # Features
 
+- Event registeriton and dispatching
 - Receives and dispatches mouse, keyboard and touch events
 - Provides and dispatches dragging events based on mouse and touch events
 - Provides functions to check whether specified key is pressed

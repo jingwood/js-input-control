@@ -42,7 +42,27 @@ class InputController {
         return false;
       };
     }
-	}
+  }
+
+  raise(eventName) {
+    this.raiseEvent(eventName, this.createEventArgument());
+  }
+
+  createEventArgument() {
+    const arg = {};
+    this.mouseAgent.createEventArgument(arg);
+    this.keyboardAgent.createEventArgument(arg);
+    this.touchAgent.createEventArgument(arg);
+    return arg;
+  }
+
+  isButtonPressed(button) {
+    return this.mouseAgent.isButtonPressed(button);
+  }
+  
+  isKeyPressed(keys) {
+    return this.keyboardAgent.isKeyPressed(key);
+  }
 }
 
 new EventDispatcher(InputController).registerEvents(
@@ -51,4 +71,4 @@ new EventDispatcher(InputController).registerEvents(
   "drag", "begindrag", "enddrag"
 );
 
-export { InputController };
+export { InputController, EventDispatcher };

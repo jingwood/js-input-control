@@ -32,6 +32,7 @@ window.addEventListener("load", e => {
   function attachEventLog(eventName) {
     controller.on(eventName, e => {
       log(eventName);
+      console.log(e);
     });
   }
 

@@ -5,7 +5,7 @@
 // MIT License (C) 2015-2020 Jingwood, unvell.com, all rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
 
-import { OperationModes } from "./defines";
+import { OperationModes, Point } from "./defines";
 
 const MouseButtons = {
   None: 0,
@@ -26,15 +26,15 @@ export class MouseAgent {
     this.element = controller.element;
 
     // current mouse position
-    this.position = { x: 0, y: 0 };
+    this.position = new Point();
 
     // amount of mouse movement difference
-    this.movement = { x: 0, y: 0 };
+    this.movement = new Point();
     this.firstMovementUpdate = true;
 
     // draging start and end position
-    this.dragstart = { x: 0, y: 0 };
-    this.dragend = { x: 0, y: 0 };
+    this.dragstart = new Point();
+    this.dragend = new Point();
     this.dragCheckThreshold = 3;
 
     // mouse wheel
@@ -71,7 +71,7 @@ export class MouseAgent {
 
       this.controller.operationMode = OperationModes.DragReady;
       
-      controller.onmousedown(this);
+      controller.raise("mousedown");
     });
  
     element.addEventListener("mousemove", e => {
@@ -80,7 +80,7 @@ export class MouseAgent {
         if (Math.abs(this.position.x - this.dragstart.x) > this.dragCheckThreshold
           || Math.abs(this.position.y - this.dragstart.y) > this.dragCheckThreshold) {
           
-          controller.onbegindrag(this);
+          controller.raise("begindrag");
           controller.operationMode = OperationModes.Dragging;
         }
       }
@@ -105,7 +105,7 @@ export class MouseAgent {
         this.position.y = client.y;
 
         if (Math.abs(this.movement.x) > 0 || Math.abs(this.movement.y) > 0) {
-          controller.onmousemove(this);
+          controller.raise("mousemove");
         }
       }
     });
@@ -113,7 +113,7 @@ export class MouseAgent {
     element.addEventListener("mousewheel", (e) => {
       this.wheeldelta = e.wheelDelta;
 
-      const ret = controller.onmousewheel(this);
+      const ret = controller.raise("mousewheel");
       
       if (ret) {
         e.preventDefault();
@@ -122,11 +122,11 @@ export class MouseAgent {
     }, { passive: false });
 
     element.addEventListener("mouseenter", (e) => {
-      controller.onmouseenter(this);
+      controller.raise("mouseenter");
     });
 
     element.addEventListener("mouseout", (e) => {
-      controller.onmouseout(this);
+      controller.raise("mouseout");
     });
 
     // surface.addEventListener("blur", (e) => {
@@ -160,16 +160,16 @@ export class MouseAgent {
   
       switch (controller.operationMode) {
         case OperationModes.Dragging:
-          controller.ondrag(this);
+          controller.raise("drag");
           break;
       }
     });
   
     window.addEventListener("mouseup", (e) => {
       if (controller.operationMode === OperationModes.Dragging) {
-        controller.onenddrag(this);
+        controller.raise("enddrag");
       } else {
-        controller.onmouseup(this);
+        controller.raise("mouseup");
       }
   
       switch (e.button) {
@@ -180,6 +180,19 @@ export class MouseAgent {
   
       controller.operationMode = OperationModes.None;
     });
+  }
+
+  isButtonPressed(button) {
+    return this.pressedButtons.includes(button);
+  }
+
+  createEventArgument(arg) {
+    arg.position = this.position.clone();
+    arg.movement = this.movement.clone();
+    arg.dragstart = this.dragstart.clone();
+    arg.dragend = this.dragend.clone();
+    arg.wheeldelta = this.wheeldelta;
+    return arg;
   }
 
   // TODO: use stack

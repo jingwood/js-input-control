@@ -35,6 +35,7 @@ export class KeyboardAgent {
     this.controller = controller;
     this.element = controller.element;
 
+    this.lastKeyCode = 0;
     this.pressedKeys = [];
 
     this.attach();
@@ -46,8 +47,9 @@ export class KeyboardAgent {
 
     element.addEventListener("keydown", (e) => {
       this.pressedKeys._t_pushIfNotExist(e.keyCode);
+      this.lastKeyCode = e.keyCode;
 
-      const isProcessed = controller.onkeydown(e.keyCode);
+      const isProcessed = controller.raise("keydown");
 
       if (isProcessed) {
         e.preventDefault();
@@ -57,7 +59,8 @@ export class KeyboardAgent {
 
     window.addEventListener("keyup", (e) => {
       this.pressedKeys._t_remove(e.keyCode);
-      controller.onkeyup(e.keyCode);
+      this.lastKeyCode = e.keyCode;
+      controller.raise("keyup");
     });
 
     // element.addEventListener("blur", (e) => {
@@ -68,6 +71,15 @@ export class KeyboardAgent {
       this.pressedKeys._t_clear();
     });
   }
+
+  createEventArgument(arg) {
+    arg.lastKeyCode = this.lastKeyCode;
+    return arg;
+  }
+
+  isKeyPressed(key) { 
+    return this.pressedKeys.includes(key);
+  }
 }
 
-export { Keys }
+export { Keys };

@@ -43,6 +43,28 @@ export class EventDispatcher {
       return listener;
     };
 
+    const raiseEvent = function(name, args) {
+      if (typeof this._eventListeners !== "object"
+        || !this._eventListeners.hasOwnProperty(name)) {
+        return;
+      }
+          
+      const listenerList = this._eventListeners[name];
+
+      let ret;
+          
+      for (let i = 0; i < listenerList.length; i++) {
+        var listener = listenerList[i];
+        ret = listener.call(this, args);
+
+        if (ret === true) {
+          break;
+        }
+      }
+
+      return ret;
+    };
+
     const proto = cstor.prototype;
     
     // addEventListener
@@ -52,6 +74,10 @@ export class EventDispatcher {
 
     if (typeof proto.on !== "function") {
       proto.on = proto.addEventListener;
+    }
+
+    if (typeof proto.raiseEvent !== "function") {
+      proto.raiseEvent = raiseEvent;
     }
 
     // removeEventListener
@@ -84,31 +110,12 @@ export class EventDispatcher {
     
     // define event property
     Object.defineProperty(proto, "on" + name, {
-      get: function() {
-        
-        // raise event
-        return function() {
-          if (typeof this._eventListeners !== "object"
-            || !this._eventListeners.hasOwnProperty(name)) {
-            return;
-          }
-            
-          const listenerList = this._eventListeners[name];
-
-          let ret;
-            
-          for (let i = 0; i < listenerList.length; i++) {
-            var listener = listenerList[i];
-            ret = listener.apply(this, arguments);
-
-            if (ret === true) {
-              break;
-            }
-          }
-
-          return ret;
-        };
+      
+      get: function() {        
+        return raiseEvent(name, arguments);
       },
+      
+      get: raiseEvent,
 
       set: function(listener) {
         // if assign listener to an event, clear all current registered events
