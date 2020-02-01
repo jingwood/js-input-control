@@ -12,15 +12,9 @@ const MouseButtons = {
   Left: 1,
   Middle: 2,
   Right: 3,
-  Touch0: 10,
-  Touch1: 11,
-  Touch2: 12,
-  Touch3: 13,
-  Touch4: 14,
-  Touch5: 15,
 };
 
-export class MouseAgent {
+class MouseAgent {
   constructor(controller) {
     this.controller = controller;
     this.element = controller.element;
@@ -200,3 +194,5 @@ export class MouseAgent {
 		this.element.style.cursor = type;
 	}
 }
+
+export { MouseAgent, MouseButtons };

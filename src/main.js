@@ -5,7 +5,7 @@
 // MIT License (C) 2015-2020 Jingwood, unvell.com, all rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
 
-import { MouseAgent } from "./mouse";
+import { MouseAgent, MouseButtons } from "./mouse";
 import { EventDispatcher } from "./event.js";
 import { OperationModes } from "./defines";
 import { KeyboardAgent } from "./keyboard";
@@ -53,6 +53,8 @@ class InputController {
     this.mouseAgent.createEventArgument(arg);
     this.keyboardAgent.createEventArgument(arg);
     this.touchAgent.createEventArgument(arg);
+    arg.isButtonPressed = button => this.isButtonPressed(button);
+    arg.isKeyPressed = key => this.isKeyPressed(key);
     return arg;
   }
 
@@ -60,7 +62,7 @@ class InputController {
     return this.mouseAgent.isButtonPressed(button);
   }
   
-  isKeyPressed(keys) {
+  isKeyPressed(key) {
     return this.keyboardAgent.isKeyPressed(key);
   }
 }
@@ -71,4 +73,4 @@ new EventDispatcher(InputController).registerEvents(
   "drag", "begindrag", "enddrag"
 );
 
-export { InputController, EventDispatcher };
+export { InputController, EventDispatcher, MouseButtons };
