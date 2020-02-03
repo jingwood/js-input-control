@@ -57,7 +57,7 @@ export class EventDispatcher {
         var listener = listenerList[i];
         ret = listener.call(this, args);
 
-        if (ret === true) {
+        if (ret) {
           break;
         }
       }
@@ -111,11 +111,11 @@ export class EventDispatcher {
     // define event property
     Object.defineProperty(proto, "on" + name, {
       
-      get: function() {        
-        return raiseEvent(name, arguments);
+      get: function() {
+        return function() {
+          return raiseEvent.call(this, name, ...arguments);
+        }
       },
-      
-      get: raiseEvent,
 
       set: function(listener) {
         // if assign listener to an event, clear all current registered events
@@ -138,7 +138,7 @@ export class EventDispatcher {
 
       if (!(function() {
         if (eventName.startsWith("on")) {
-          var eventNameWithoutOn = eventName.substr(2);
+          const eventNameWithoutOn = eventName.substr(2);
 
           if (this.events.hasOwnProperty(eventNameWithoutOn)) {
             console.warn("recommended to remove 'on' prefix for adding event listener: " + eventName);

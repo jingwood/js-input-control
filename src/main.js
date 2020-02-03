@@ -8,7 +8,7 @@
 import { MouseAgent, MouseButtons } from "./mouse";
 import { EventDispatcher } from "./event.js";
 import { OperationModes } from "./defines";
-import { KeyboardAgent } from "./keyboard";
+import { KeyboardAgent, Keys } from "./keyboard";
 import { TouchAgent } from "./touches";
 
 const defaultOptions = {
@@ -45,7 +45,11 @@ class InputController {
   }
 
   raise(eventName) {
-    this.raiseEvent(eventName, this.createEventArgument());
+    if (eventName == "mousemove") {
+      this.onmousemove(this.createEventArgument());
+    } else {
+      this.raiseEvent(eventName, this.createEventArgument());
+    }
   }
 
   createEventArgument() {
@@ -65,6 +69,10 @@ class InputController {
   isKeyPressed(key) {
     return this.keyboardAgent.isKeyPressed(key);
   }
+
+  setCursor(type) {
+    this.mouseAgent.setCursor(type);
+  }
 }
 
 new EventDispatcher(InputController).registerEvents(
@@ -73,4 +81,4 @@ new EventDispatcher(InputController).registerEvents(
   "drag", "begindrag", "enddrag"
 );
 
-export { InputController, EventDispatcher, MouseButtons };
+export { InputController, EventDispatcher, MouseButtons, Keys };
