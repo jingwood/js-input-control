@@ -54,7 +54,7 @@ export class EventDispatcher {
       let ret;
           
       for (let i = 0; i < listenerList.length; i++) {
-        var listener = listenerList[i];
+        const listener = listenerList[i];
         ret = listener.call(this, args);
 
         if (ret) {
