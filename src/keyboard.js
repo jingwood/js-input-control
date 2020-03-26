@@ -22,13 +22,31 @@ const Keys = {
   O: 79, P: 80, Q: 81, R: 82, S: 83, T: 84,
   U: 85, V: 86, W: 87, X: 88, Y: 89, Z: 90,
 
-  MacCommand_Firefox: 224, MacCommand_Opera: 17,
-  MacCommand_Left: 91, MacCommand_Right: 93,
+  Command_Firefox: 224, Command_Opera: 17,
+  Command_Left: 91, Command_Right: 93,
   
   Multiply: 106, Add: 107, Subtract: 108, Divide: 111,
 
   Backquote: 192,
 };
+
+const FunctionKeys = {
+  Control: 0x1000,
+  Alt: 0x2000,
+  Shift: 0x4000,
+  Command: 0x10000,
+  Windows: 0x20000,
+};
+
+const functionKeyCode = [
+  Keys.Control, Keys.Shift, Keys.Alt,
+  Keys.Command_Left, Keys.Command_Right,
+  Keys.Command_Firefox, Keys.Command_Opera
+];
+
+function isFunctionKey(keyCode) {
+  return functionKeyCode.includes(keyCode);
+}
 
 export class KeyboardAgent {
   constructor(controller) {
@@ -45,13 +63,21 @@ export class KeyboardAgent {
     const controller = this.controller;
     const element = this.element;
 
-    element.addEventListener("keydown", (e) => {
+    element.addEventListener("keydown", e => {
       this.pressedKeys._t_pushIfNotExist(e.keyCode);
       this.lastKeyCode = e.keyCode;
+      
+      const arg = this.createEventArgument(e);
 
-      const isProcessed = controller.raise("keydown");
+      if (arg.isHotkey) {
+        controller.raise("hotkey", arg);
+      }
 
-      if (isProcessed) {
+      if (!arg.isProcessed) {
+        controller.raise("keydown", arg);
+      }
+
+      if (arg.isProcessed) {
         e.preventDefault();
         return false;
       }
@@ -60,20 +86,76 @@ export class KeyboardAgent {
     window.addEventListener("keyup", (e) => {
       this.pressedKeys._t_remove(e.keyCode);
       this.lastKeyCode = e.keyCode;
-      controller.raise("keyup");
+
+      const arg = this.createEventArgument(e);
+
+      if (!arg.isHotkey) {
+        controller.raise("keyup", arg);
+      }
+
+      if (arg.isProcessed) {
+        e.preventDefault();
+        return false;
+      }
     });
 
-    // element.addEventListener("blur", (e) => {
-    //   this.pressedKeys._t_clear();
+    // hotkey
+    // window.addEventListener("keydown", e => {
+    //   const arg = this.createEventArgument(e);
+     
+    //   if (arg.isHotkey) {
+    //     controller.raise("hotkey", arg);
+    //   }
+
+    //   if (arg.isProcessed) {
+    //     e.preventDefault();
+    //     return false;
+    //   }
     // });
+
+    element.addEventListener("blur", (e) => {
+      this.pressedKeys._t_clear();
+    });
 
     window.addEventListener("blur", (e) => {
       this.pressedKeys._t_clear();
     });
   }
 
-  createEventArgument(arg) {
-    arg.lastKeyCode = this.lastKeyCode;
+  createEventArgument(e) {
+    const arg = {
+      domEvent: e,
+     
+      keyCode: e.keyCode,
+      keyValue: e.keyCode, 
+    };
+
+    let functionKeyDown = false;
+
+    if (e.ctrlKey) {
+      arg.keyValue |= FunctionKeys.Control;
+      functionKeyDown = true;
+    }
+
+    if (e.altKey) {
+      arg.keyValue |= FunctionKeys.Alt;
+      functionKeyDown = true;
+    }
+
+    if (e.shiftKey) {
+      arg.keyValue |= FunctionKeys.Shift;
+      functionKeyDown = true;
+    }
+
+    if (e.metaKey) {
+      arg.keyValue |= FunctionKeys.Command;
+      functionKeyDown = true;
+    }
+
+    if (functionKeyDown) {
+      if (!isFunctionKey(e.keyCode)) arg.isHotkey = true;
+    }
+
     return arg;
   }
 
@@ -82,4 +164,4 @@ export class KeyboardAgent {
   }
 }
 
-export { Keys };
+export { Keys, FunctionKeys };

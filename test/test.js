@@ -49,5 +49,6 @@ window.addEventListener("load", e => {
   
   attachEventLog("keydown");
   attachEventLog("keyup");
+  attachEventLog("hotkey");
   
 });
