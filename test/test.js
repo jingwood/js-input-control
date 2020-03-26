@@ -13,11 +13,12 @@ window.addEventListener("load", e => {
   element.focus();
 
   const controller = new InputController(element);
-  const logtext = document.getElementById("logtext");
+  const logtext = document.getElementById("log");
+  const logarg = document.getElementById("log-arg");
 
   let lastMsg = undefined;
 
-  function log(msg) {
+  function log(msg, arg) {
     if (lastMsg !== msg) {
       logtext.innerText += "\n";
       logtext.innerText += msg;
@@ -27,12 +28,14 @@ window.addEventListener("load", e => {
     }
 
     logtext.scrollTop = logtext.scrollHeight;
+    logarg.innerText = JSON.stringify(arg);
   }
 
   function attachEventLog(eventName) {
     controller.on(eventName, e => {
-      log(eventName);
-      console.log(e.isButtonPressed(1), e);
+      log(eventName, e);
+      console.log(e);
+      e.isProcessed = true;
     });
   }
 

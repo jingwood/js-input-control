@@ -29,11 +29,11 @@
       outline: none; 
     }
 
-    #logtext {
+    #log {
       position: absolute;
       background-color: bisque;
       height: 30%;
-      bottom: 0px;
+      bottom: 70px;
       left: 0px;
       right: 0px;
       padding: 10px;
@@ -45,11 +45,22 @@
       -ms-user-select: none;
       user-select: none;
     }
+
+    #log-arg {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 50px;
+      bottom: 0;
+      padding: 10px;
+      background-color: darkgrey;
+    }
   </style>
 </head>
 <body>
   <div id="testbox"></div>
 
-  <div id="logtext"></textarea>
+  <div id="log"></div>
+  <div id="log-arg"></div>
 </body>
 </html>
