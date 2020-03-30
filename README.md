@@ -13,6 +13,6 @@ A lightweight Javascript library used to handle the input events of mouse, keybo
 
 # License
 
-MIT License 
+Released under MIT License
 
-(C) 2015-2020 Jingwood, unvell.com, all rights reserved.
+Copyright (C) 2015-2020 Jingwood, unvell.com, all rights reserved.
