@@ -11,6 +11,39 @@ A lightweight Javascript library used to handle the input events of mouse, keybo
 - Provides functions to check whether specified key is pressed
 - Provides hotkey define feature (todo)
 
+# Installation
+
+```shell
+yarn add @jingwood/input-control
+```
+
+# Hello-World
+
+```js
+
+// get the element to receive mouse, keyboard and touch events
+const element = document.getElementById(myTargetElement);
+
+// make sure the element can receive keyboard events
+element.tabIndex = 0;
+element.focus();
+
+// create controller and use 'on' method to receive input events
+const controller = new InputController(element);
+
+// keyup event
+controller.on("keyup" e => {
+  if (e.keyCode === 32) {
+    alert("Space key was pressed");
+  }
+});
+
+// drag event
+controller.on("drag", e => {
+  console.log("mouse moving " + e.movement.x + ", " + e.movement.y);
+});
+```
+
 # License
 
 Released under MIT License
