@@ -76,9 +76,9 @@ export class TouchAgent {
 
 		window.addEventListener("touchend", (e) => {
 			if (e.touches) {
-				this.touch.fingers = e.touches.length;
+				this.fingers = e.length;
 			} else {
-				this.touch.fingers = 0;
+				this.fingers = 0;
 			}
 
 			controller.raise("mouseup");
@@ -87,7 +87,9 @@ export class TouchAgent {
 	}
 	
 	createEventArgument(arg) {
-		arg.touch = this.touch;
+		arg.touch = {
+			fingers: this.fingers
+		};
 		return arg;
 	}
 }
