@@ -65,7 +65,7 @@ class MouseAgent {
 
       this.controller.operationMode = OperationModes.DragReady;
       
-      controller.raise("mousedown");
+      controller.raise("mousedown", this.createEventArgument(e));
     });
  
     element.addEventListener("mousemove", e => {
@@ -74,12 +74,12 @@ class MouseAgent {
         if (Math.abs(this.position.x - this.dragstart.x) > this.dragCheckThreshold
           || Math.abs(this.position.y - this.dragstart.y) > this.dragCheckThreshold) {
           
-          controller.raise("begindrag");
+          controller.raise("begindrag", this.createEventArgument(e));
           controller.operationMode = OperationModes.Dragging;
         }
       }
 
-      if (controller.operationMode === OperationModes.None) {
+      else if (controller.operationMode === OperationModes.None) {
         const clientRect = element.getBoundingClientRect();
         const client = {
           x: e.clientX - clientRect.left,
@@ -99,7 +99,7 @@ class MouseAgent {
         this.position.y = client.y;
 
         if (Math.abs(this.movement.x) > 0 || Math.abs(this.movement.y) > 0) {
-          controller.raise("mousemove");
+          controller.raise("mousemove", this.createEventArgument(e));
         }
       }
     });
@@ -107,28 +107,21 @@ class MouseAgent {
     element.addEventListener("mousewheel", (e) => {
       this.wheeldelta = e.wheelDelta;
 
-      const ret = controller.raise("mousewheel");
+      const arg = this.createEventArgument(e);
+      controller.raise("mousewheel", arg);
       
-      if (ret) {
+      if (arg.isProcessed) {
         e.preventDefault();
         return false;
       }
     }, { passive: false });
 
     element.addEventListener("mouseenter", (e) => {
-      controller.raise("mouseenter");
+      controller.raise("mouseenter", this.createEventArgument(e));
     });
 
     element.addEventListener("mouseout", (e) => {
-      controller.raise("mouseout");
-    });
-
-    // surface.addEventListener("blur", (e) => {
-    //   this.pressedButtons._t_clear();
-    // });
-
-    window.addEventListener("blur", (e) => {
-      this.pressedButtons._t_clear();
+      controller.raise("mouseout", this.createEventArgument(e));
     });
 
     window.addEventListener("mousemove", (e) => {
@@ -154,16 +147,16 @@ class MouseAgent {
   
       switch (controller.operationMode) {
         case OperationModes.Dragging:
-          controller.raise("drag");
+          controller.raise("drag", this.createEventArgument(e));
           break;
       }
     });
   
     window.addEventListener("mouseup", (e) => {
       if (controller.operationMode === OperationModes.Dragging) {
-        controller.raise("enddrag");
+        controller.raise("enddrag", this.createEventArgument(e));
       } else {
-        controller.raise("mouseup");
+        controller.raise("mouseup", this.createEventArgument(e));
       }
   
       switch (e.button) {
@@ -180,13 +173,16 @@ class MouseAgent {
     return this.pressedButtons.includes(button);
   }
 
-  createEventArgument(arg) {
-    arg.position = this.position.clone();
-    arg.movement = this.movement.clone();
-    arg.dragstart = this.dragstart.clone();
-    arg.dragend = this.dragend.clone();
-    arg.wheeldelta = this.wheeldelta;
-    return arg;
+  createEventArgument(e) {
+    return {
+      isProcessed: false,
+      position: this.position.clone(),
+      movement: this.movement.clone(),
+      dragstart: this.dragstart.clone(),
+      dragend: this.dragend.clone(),
+      wheeldelta: this.wheeldelta,
+      domEvent: e,
+    }
   }
 
   // TODO: use stack

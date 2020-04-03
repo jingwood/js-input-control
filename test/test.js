@@ -7,6 +7,8 @@
 
 import { InputController } from "../src/main.js";
 
+import { Keys } from "../src/keyboard";
+
 window.addEventListener("load", e => {
   const element = document.getElementById("testbox");
   element.tabIndex = 0;
@@ -53,5 +55,5 @@ window.addEventListener("load", e => {
   attachEventLog("keydown");
   attachEventLog("keyup");
   attachEventLog("hotkey");
-  
+
 });

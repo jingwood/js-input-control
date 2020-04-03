@@ -50,11 +50,10 @@ class InputController {
 
   createEventArgument(args) {
     const arg = args || {};
-    this.mouseAgent.createEventArgument(arg);
     this.touchAgent.createEventArgument(arg);
     arg.isButtonPressed = button => this.isButtonPressed(button);
     arg.isKeyPressed = key => this.isKeyPressed(key);
-    return arg; 
+    return arg;
   }
 
   isButtonPressed(button) {
