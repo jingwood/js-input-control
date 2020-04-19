@@ -133,6 +133,8 @@ class MouseAgent {
         y: e.clientY - clientRect.top
       };
 
+      // FIXME: first drag doesn't pass correct movement
+      
       if (this.firstMovementUpdate) {
         this.movement.x = 0;
         this.movement.y = 0;
@@ -151,21 +153,25 @@ class MouseAgent {
           break;
       }
     });
-  
-    window.addEventListener("mouseup", (e) => {
-      if (controller.operationMode === OperationModes.Dragging) {
-        controller.raise("enddrag", this.createEventArgument(e));
-      } else {
+
+    element.addEventListener("mouseup", e => {
+      if (controller.operationMode !== OperationModes.Dragging) {
         controller.raise("mouseup", this.createEventArgument(e));
       }
+    });
   
+    window.addEventListener("mouseup", e => {
+      if (controller.operationMode === OperationModes.Dragging) {
+        controller.raise("enddrag", this.createEventArgument(e));
+      }
+
+      controller.operationMode = OperationModes.None;
+
       switch (e.button) {
         case 0: this.pressedButtons._t_remove(MouseButtons.Left); break;
         case 1: this.pressedButtons._t_remove(MouseButtons.Middle); break;
         case 2: this.pressedButtons._t_remove(MouseButtons.Right); break;
       }
-  
-      controller.operationMode = OperationModes.None;
     });
   }
 
