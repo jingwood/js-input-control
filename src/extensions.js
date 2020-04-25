@@ -46,27 +46,27 @@ if (!Array.prototype._t_foreach) {
 	});
 }
 
-if (!Array.prototype._t_arrayIndexOf) {
-	Object.defineProperty(Array.prototype, "_t_arrayIndexOf", {
-		value: function(element) {
-			for (var i = 0; i < this.length; i++) {
-				var item = this[i];
+// if (!Array.prototype._t_arrayIndexOf) {
+// 	Object.defineProperty(Array.prototype, "_t_arrayIndexOf", {
+// 		value: function(element) {
+// 			for (var i = 0; i < this.length; i++) {
+// 				var item = this[i];
 		
-				if (item === element) {
-					return i;
-				}
-			}
+// 				if (item === element) {
+// 					return i;
+// 				}
+// 			}
 		
-			return -1;
-		},
-		enumerable: false
-	});
-}
+// 			return -1;
+// 		},
+// 		enumerable: false
+// 	});
+// }
 
 if (!Array.prototype._t_remove) {
 	Object.defineProperty(Array.prototype, "_t_remove", {
 		value: function(element) {
-			var index = this._t_arrayIndexOf(element);
+			var index = this.indexOf(element);
 			if (index > -1) this.splice(index, 1);
 		},
 		enumerable: false
@@ -75,8 +75,8 @@ if (!Array.prototype._t_remove) {
 
 if (!Array.prototype._t_removeAt) {
 	Object.defineProperty(Array.prototype, "_t_removeAt", {
-		value: function(index) {
-			this.splice(index, 1);
+		value: function(index, count = 1) {
+			this.splice(index, count);
 		}
 	});
 }
@@ -114,17 +114,17 @@ if (!Array.prototype._t_set) {
 	});
 }
 
-if (!Array.prototype._t_any) {
-	Object.defineProperty(Array.prototype, "_t_any", {
-		value: function(handler) {
-			for (var i = 0; i < this.length; i++) {
-				var item = this[i];
+// if (!Array.prototype._t_any) {
+// 	Object.defineProperty(Array.prototype, "_t_any", {
+// 		value: function(handler) {
+// 			for (var i = 0; i < this.length; i++) {
+// 				var item = this[i];
 		
-				if (handler(item)) {
-					return true;
-				}
-			}
-		}
-	});
-}
+// 				if (handler(item)) {
+// 					return true;
+// 				}
+// 			}
+// 		}
+// 	});
+// }
 
