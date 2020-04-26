@@ -128,3 +128,22 @@ if (!Array.prototype._t_set) {
 // 	});
 // }
 
+if (!Object.prototype._t_foreach) {
+  Object.defineProperty(Object.prototype, "_t_foreach", {
+    value: function(iterator) {
+      if (this == null) {
+        throw Error("Cannot iterate over null object");
+      }
+      const _this = this || window;
+      for (const key in _this) {
+        if (_this.hasOwnProperty(key)) {
+          const ret = iterator.call(_this, key, _this[key]);
+          if (ret === false) break;
+        }
+      }
+    },
+    enumerable: false,
+  });
+}
+
+
