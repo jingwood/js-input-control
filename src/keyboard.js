@@ -89,9 +89,7 @@ export class KeyboardAgent {
 
       const arg = this.createEventArgument(e);
 
-      if (!arg.isHotkey) {
-        controller.raise("keyup", arg);
-      }
+      controller.raise("keyup", arg);
 
       if (arg.isProcessed) {
         e.preventDefault();
