@@ -17,7 +17,7 @@ export class EventDispatcher {
 
     // copy event defines from prototype of target object
     const cstorProto = Object.getPrototypeOf(cstor);
-    if (cstorProto.hasOwnProperty("__events")) {
+    if (cstorProto.__events) {
       cstor.__events = { ...cstorProto.__events };
     } else {
       cstor.__events = {};

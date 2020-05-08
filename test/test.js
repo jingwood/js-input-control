@@ -82,7 +82,7 @@ window.addEventListener("load", e => {
   b.on("a", n => console.log(n + " raised"));
   b.ona("b.a");
 
-  c.on("a b", n => console.log(n + " raised"));
+  c.on("a", n => console.log(n + " raised"));
   c.ona("c.a");
   c.ona("c.b");
   // event dispatcher test
