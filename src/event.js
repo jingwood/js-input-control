@@ -10,18 +10,25 @@ import "./extensions.js";
 export class EventDispatcher {
   constructor(cstor) {
     if (!cstor) {
-      throw "Owner object to define events cannot be null or undefined";
+      throw Error("Object to define events cannot be null or undefined");
     }
 
-    this.owner = cstor;
-    this.events = {};
+    this.cstor = cstor;
+
+    // copy event defines from prototype of target object
+    const cstorProto = Object.getPrototypeOf(cstor);
+    if (cstorProto.hasOwnProperty("__events")) {
+      cstor.__events = { ...cstorProto.__events };
+    } else {
+      cstor.__events = {};
+    }
   }
 
   registerEvents() {
     for (let i = 0; i < arguments.length; i++) {
       const eventName = arguments[i];
-      this.events[eventName] = null;
-      this.setupPrototypeEventDispatcher(this.owner, eventName);
+      this.cstor.__events[eventName] = null;
+      this.setupPrototypeEventDispatcher(this.cstor, eventName);
 		}
   }
 
@@ -68,17 +75,15 @@ export class EventDispatcher {
     const proto = cstor.prototype;
     
     // addEventListener
-    if (typeof proto.addEventListener !== "function") {
-      proto.addEventListener = addEventListener;
-    }
+    proto.addEventListener = addEventListener;
 
-    if (typeof proto.on !== "function") {
+    // if (typeof proto.on !== "function") {
       proto.on = proto.addEventListener;
-    }
+    // }
 
-    if (typeof proto.raiseEvent !== "function") {
+    // if (typeof proto.raiseEvent !== "function") {
       proto.raiseEvent = raiseEvent;
-    }
+    // }
 
     // removeEventListener
     if (typeof proto.removeEventListener !== "function") {
@@ -89,7 +94,7 @@ export class EventDispatcher {
             if (eventName.startsWith("on")) {
               const eventNameWithoutOn = eventName.substr(2);
 
-              if (_this.events.hasOwnProperty(eventNameWithoutOn)) {
+              if (cstor.__events.hasOwnProperty(eventNameWithoutOn)) {
                 console.warn("recommended to remove 'on' prefix for removing event listener: " + eventName);
                 eventName = eventNameWithoutOn;
 
@@ -134,13 +139,15 @@ export class EventDispatcher {
   }
 
   addEventListenerForObject(obj, eventName, listener) {
-    if (!this.events.hasOwnProperty(eventName)) {
+    const cstor = Object.getPrototypeOf(obj).constructor;
+
+    if (!cstor.__events.hasOwnProperty(eventName)) {
 
       if (!(function() {
         if (eventName.startsWith("on")) {
           const eventNameWithoutOn = eventName.substr(2);
 
-          if (this.events.hasOwnProperty(eventNameWithoutOn)) {
+          if (cstor.__events.hasOwnProperty(eventNameWithoutOn)) {
             console.warn("recommended to remove 'on' prefix for adding event listener: " + eventName);
             eventName = eventNameWithoutOn;
 

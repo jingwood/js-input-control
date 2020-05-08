@@ -5,7 +5,7 @@
 // MIT License (C) 2015-2020 Jingwood, unvell.com, all rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
 
-import { InputController } from "../src/main.js";
+import { InputController, EventDispatcher } from "../src/main.js";
 
 import { Keys } from "../src/keyboard";
 
@@ -56,4 +56,34 @@ window.addEventListener("load", e => {
   attachEventLog("keyup");
   attachEventLog("hotkey");
 
+
+  // event dispatcher test
+  class A {
+  }
+  new EventDispatcher(A).registerEvents("a");
+
+  class B extends A {
+  }
+  new EventDispatcher(B).registerEvents("b");
+
+  class C extends B {
+  }
+  new EventDispatcher(C).registerEvents("c");
+  
+  const a = new A(), b = new B(), c = new C();
+  a.on("a", n => console.log(n + " raised"));
+  b.on("b", n => console.log(n + " raised"));
+  c.on("c", n => console.log(n + " raised"));
+
+  a.ona("a.a");
+  b.onb("b.b");
+  c.onc("c.c");
+
+  b.on("a", n => console.log(n + " raised"));
+  b.ona("b.a");
+
+  c.on("a b", n => console.log(n + " raised"));
+  c.ona("c.a");
+  c.ona("c.b");
+  // event dispatcher test
 });
