@@ -83,7 +83,7 @@ export class KeyboardAgent {
       }
     });
 
-    window.addEventListener("keyup", (e) => {
+    element.addEventListener("keyup", (e) => {
       this.pressedKeys._t_remove(e.keyCode);
       this.lastKeyCode = e.keyCode;
 
@@ -112,11 +112,11 @@ export class KeyboardAgent {
     // });
 
     element.addEventListener("blur", (e) => {
-      this.pressedKeys._t_clear();
+      this.pressedKeys = [];
     });
 
     window.addEventListener("blur", (e) => {
-      this.pressedKeys._t_clear();
+      this.pressedKeys = [];
     });
   }
 

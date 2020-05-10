@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "test": "parcel --out-dir output html/test.html",
-    "serve": "parcel --out-dir output html/test.html -p 8004",
+    "start": "parcel --out-dir output html/test.html -p 8004",
     "build": "npx babel src -d dist --verbose"
   },
   "repository": "https://github.com/jingwood/js-input-control.git",
