@@ -39,7 +39,7 @@ export class TouchAgent {
         controller.operationMode = OperationModes.DragReady;
         this.fingers = e.touches.length;
 
-        controller.raise("mousedown");
+        controller.raise(this, "mousedown", this.createEventArgument(e));
       }
     }, { passive: true });
 
@@ -61,13 +61,13 @@ export class TouchAgent {
 
 				switch (controller.operationMode) {
 					case OperationModes.DragReady:
-            controller.raise("begindrag");
+            controller.raise(this, "begindrag", this.createEventArgument(e));
 						e.preventDefault();
 						controller.operationMode = OperationModes.Dragging;
 						break;
 
 					case OperationModes.Dragging:
-  					controller.raise("drag");
+  					controller.raise(this, "drag", this.createEventArgument(e));
 						e.preventDefault();
 						break;
 				}
@@ -79,15 +79,22 @@ export class TouchAgent {
 				this.fingers = e.length;
 			} else {
 				this.fingers = 0;
-			}
+      }
+      
+      if (controller.operationMode === OperationModes.Dragging) {
+        controller.raise(this, "enddrag", this.createEventArgument(e));
+        controller.operationMode = OperationModes.None;
+      } else {
+        controller.operationMode = OperationModes.None;
+        controller.raise(this, "mouseup", this.createEventArgument(e));
+      }
 
-			controller.raise("mouseup");
-			controller.operationMode = OperationModes.None;
 		});
 	}
 	
-	createEventArgument(arg) {
-		arg.touch = {
+  createEventArgument(e) {
+    const arg = this.controller.mouseAgent.createEventArgument(e);
+    arg.touch = {
 			fingers: this.fingers
 		};
 		return arg;

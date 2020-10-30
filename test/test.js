@@ -5,7 +5,7 @@
 // MIT License (C) 2015-2020 Jingwood, unvell.com, all rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
 
-import { InputController, EventDispatcher } from "../src/main.js";
+import { InputController, EventDispatcher } from "../src/controller.js";
 
 import { Keys } from "../src/keyboard";
 
@@ -48,6 +48,9 @@ window.addEventListener("load", e => {
   attachEventLog("mouseout");
   attachEventLog("mousewheel");
 
+  // attachEventLog("mouseup2");
+  // attachEventLog("mousedown2");
+
   attachEventLog("drag");
   attachEventLog("begindrag");
   attachEventLog("enddrag");
@@ -84,6 +87,6 @@ window.addEventListener("load", e => {
 
   c.on("a", n => console.log(n + " raised"));
   c.ona("c.a");
-  c.ona("c.b");
+  c.ona("c.a2");
   // event dispatcher test
 });

@@ -70,11 +70,11 @@ export class KeyboardAgent {
       const arg = this.createEventArgument(e);
 
       if (arg.isHotkey) {
-        controller.raise("hotkey", arg);
+        controller.raise(this, "hotkey", arg);
       }
 
       if (!arg.isProcessed) {
-        controller.raise("keydown", arg);
+        controller.raise(this, "keydown", arg);
       }
 
       if (arg.isProcessed) {
@@ -89,7 +89,7 @@ export class KeyboardAgent {
 
       const arg = this.createEventArgument(e);
 
-      controller.raise("keyup", arg);
+      controller.raise(this, "keyup", arg);
 
       if (arg.isProcessed) {
         e.preventDefault();
@@ -102,7 +102,7 @@ export class KeyboardAgent {
     //   const arg = this.createEventArgument(e);
      
     //   if (arg.isHotkey) {
-    //     controller.raise("hotkey", arg);
+    //     controller.raise(this, "hotkey", arg);
     //   }
 
     //   if (arg.isProcessed) {

@@ -36,6 +36,8 @@ class InputController {
     this.keyboardAgent = new KeyboardAgent(this);
     this.touchAgent = new TouchAgent(this);
 
+    this.currentAgent = null;
+    
     if (this.options.disableContextMenu) {
       window.oncontextmenu = (e) => {
         e.preventDefault();
@@ -44,13 +46,14 @@ class InputController {
     }
   }
 
-  raise(eventName, args) {
+  raise(agent, eventName, args) {
+    this.currentAgent = agent;
     this.raiseEvent(eventName, this.createEventArgument(args));
   }
 
   createEventArgument(args) {
     const arg = args || {};
-    this.touchAgent.createEventArgument(arg);
+    // this.touchAgent.createEventArgument(arg);
     arg.isButtonPressed = button => this.isButtonPressed(button);
     arg.isKeyPressed = key => this.isKeyPressed(key);
     return arg;
@@ -72,7 +75,8 @@ class InputController {
 new EventDispatcher(InputController).registerEvents(
   "mousedown", "mouseup", "mousemove", "mouseenter", "mouseout", "mousewheel",
   "keydown", "keyup", "hotkey",
-  "drag", "begindrag", "enddrag"
+  "drag", "begindrag", "enddrag",
+  "mouseup2", "mousedown2",
 );
 
 export { InputController, EventDispatcher, MouseButtons, Keys, FunctionKeys };

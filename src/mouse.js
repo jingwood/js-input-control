@@ -65,20 +65,19 @@ class MouseAgent {
 
       this.controller.operationMode = OperationModes.DragReady;
       
-      controller.raise("mousedown", this.createEventArgument(e));
+      controller.raise(this, "mousedown", this.createEventArgument(e));
     });
  
     element.addEventListener("mousemove", e => {
-
+      
       if (controller.operationMode == OperationModes.DragReady) {
         if (Math.abs(this.position.x - this.dragstart.x) > this.dragCheckThreshold
           || Math.abs(this.position.y - this.dragstart.y) > this.dragCheckThreshold) {
           
-          controller.raise("begindrag", this.createEventArgument(e));
+          controller.raise(this, "begindrag", this.createEventArgument(e));
           controller.operationMode = OperationModes.Dragging;
         }
       }
-
       else if (controller.operationMode === OperationModes.None) {
         const clientRect = element.getBoundingClientRect();
         const client = {
@@ -99,7 +98,7 @@ class MouseAgent {
         this.position.y = client.y;
 
         if (Math.abs(this.movement.x) > 0 || Math.abs(this.movement.y) > 0) {
-          controller.raise("mousemove", this.createEventArgument(e));
+          controller.raise(this, "mousemove", this.createEventArgument(e));
         }
       }
     });
@@ -108,7 +107,7 @@ class MouseAgent {
       this.wheeldelta = e.wheelDelta;
 
       const arg = this.createEventArgument(e);
-      controller.raise("mousewheel", arg);
+      controller.raise(this, "mousewheel", arg);
       
       if (arg.isProcessed) {
         e.preventDefault();
@@ -117,11 +116,11 @@ class MouseAgent {
     }, { passive: false });
 
     element.addEventListener("mouseenter", (e) => {
-      controller.raise("mouseenter", this.createEventArgument(e));
+      controller.raise(this, "mouseenter", this.createEventArgument(e));
     });
 
     element.addEventListener("mouseout", (e) => {
-      controller.raise("mouseout", this.createEventArgument(e));
+      controller.raise(this, "mouseout", this.createEventArgument(e));
     });
 
     window.addEventListener("mousemove", (e) => {
@@ -149,20 +148,20 @@ class MouseAgent {
   
       switch (controller.operationMode) {
         case OperationModes.Dragging:
-          controller.raise("drag", this.createEventArgument(e));
+          controller.raise(this, "drag", this.createEventArgument(e));
           break;
       }
     });
 
     element.addEventListener("mouseup", e => {
       if (controller.operationMode !== OperationModes.Dragging) {
-        controller.raise("mouseup", this.createEventArgument(e));
+        controller.raise(this, "mouseup", this.createEventArgument(e));
       }
     });
   
     window.addEventListener("mouseup", e => {
       if (controller.operationMode === OperationModes.Dragging) {
-        controller.raise("enddrag", this.createEventArgument(e));
+        controller.raise(this, "enddrag", this.createEventArgument(e));
       }
 
       controller.operationMode = OperationModes.None;
