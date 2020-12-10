@@ -56,6 +56,7 @@ class InputController {
     // this.touchAgent.createEventArgument(arg);
     arg.isButtonPressed = button => this.isButtonPressed(button);
     arg.isKeyPressed = key => this.isKeyPressed(key);
+    arg.controller = this;
     return arg;
   }
 
