@@ -161,6 +161,9 @@ class MouseAgent {
   
     window.addEventListener("mouseup", e => {
       if (controller.operationMode === OperationModes.Dragging) {
+        this.dragend.x = this.position.x
+        this.dragend.y = this.position.y
+        
         controller.raise(this, "enddrag", this.createEventArgument(e));
       }
 
