@@ -103,17 +103,23 @@ class MouseAgent {
       }
     })
   
-    element.addEventListener("mousewheel", (e) => {
-      this.wheeldelta = e.wheelDelta;
+    const wheelHanlder = e => {
+      this.wheeldelta = e.wheelDelta
 
-      const arg = this.createEventArgument(e);
-      controller.raise(this, "mousewheel", arg);
+      const arg = this.createEventArgument(e)
+      controller.raise(this, "mousewheel", arg)
       
       if (arg.isProcessed) {
-        e.preventDefault();
-        return false;
+        e.preventDefault()
+        return false
       }
-    }, { passive: false });
+    }
+
+    if (typeof element.onwheel !== 'undefined') {
+      element.addEventListener('wheel', wheelHanlder, { passive: false })
+    } else if (typeof element.onmousewheel !== 'undefined') {
+      element.addEventListener("mousewheel", wheelHanlder, { passive: false })
+    }
 
     element.addEventListener("mouseenter", (e) => {
       controller.raise(this, "mouseenter", this.createEventArgument(e))
