@@ -5,7 +5,7 @@
 // MIT License (C) 2015-2020 Jingwood, unvell.com, all rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
 
-import { OperationModes } from "./defines";
+import { OperationModes } from "./defines.js";
 
 export class TouchAgent {
   constructor(controller) {

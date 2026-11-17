@@ -5,7 +5,7 @@
 // MIT License (C) 2015-2020 Jingwood, unvell.com, all rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
 
-import { OperationModes, Point } from "./defines"
+import { OperationModes, Point } from "./defines.js"
 
 const MouseButtons = {
   None: 0,

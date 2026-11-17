@@ -7,7 +7,7 @@
 
 import { InputController, EventDispatcher } from "../src/controller.js";
 
-import { Keys } from "../src/keyboard"
+import { Keys } from "../src/keyboard.js"
 
 window.addEventListener("load", e => {
   const element = document.getElementById("testbox")

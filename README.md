@@ -14,12 +14,15 @@ A lightweight Javascript library used to handle the input events of mouse, keybo
 # Installation
 
 ```shell
-yarn add @jingwood/input-control
+npm install @jingwood/input-control
 ```
+
+The package is published as native ES modules with no dependencies. It works as-is in modern browsers and bundlers.
 
 # Hello-World
 
 ```js
+import { InputController, Keys } from "@jingwood/input-control";
 
 // get the element to receive mouse, keyboard and touch events
 const element = document.getElementById(myTargetElement);
@@ -32,8 +35,8 @@ element.focus();
 const controller = new InputController(element);
 
 // keyup event
-controller.on("keyup" e => {
-  if (e.keyCode === 32) {
+controller.on("keyup", e => {
+  if (e.keyCode === Keys.Space) {
     alert("Space key was pressed");
   }
 });
@@ -42,6 +45,20 @@ controller.on("keyup" e => {
 controller.on("drag", e => {
   console.log("mouse moving " + e.movement.x + ", " + e.movement.y);
 });
+```
+
+## Migrating from 1.x
+
+- The source is no longer transpiled by Babel, and `@babel/runtime` / `@babel/preset-env` are no longer dependencies. If you need to support legacy browsers, transpile the package in your own build.
+- Only the package root (`@jingwood/input-control`) can be imported. Replace deep imports such as `@jingwood/input-control/dist/keyboard` with the root: `Keys`, `FunctionKeys`, `MouseButtons`, `InputController` and `EventDispatcher` are all exported from it.
+
+# Development
+
+No install step is needed.
+
+```shell
+npm test     # unit tests (Node.js 22 or later)
+npm start    # serve html/test.html to try the controller in a browser
 ```
 
 # License

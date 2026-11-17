@@ -1,28 +1,34 @@
 {
   "name": "@jingwood/input-control",
-  "version": "1.1.1",
-  "main": "dist/controller.js",
+  "version": "2.0.0",
+  "type": "module",
+  "description": "A lightweight library to handle mouse, keyboard and touch input.",
+  "exports": "./src/controller.js",
+  "main": "./src/controller.js",
   "files": [
-    "/dist"
+    "src"
+  ],
+  "sideEffects": [
+    "./src/extensions.js"
   ],
   "scripts": {
-    "test": "parcel html/test.html",
-    "start": "parcel html/test.html -p 8004",
-    "build": "npx babel src -d dist --verbose"
+    "test": "node --test \"test/*.test.js\"",
+    "start": "npx --yes http-server@14 -c-1 -p 8004 -o /html/test.html",
+    "prepublishOnly": "npm test"
   },
-  "repository": "https://github.com/jingwood/js-input-control.git",
+  "keywords": [
+    "input",
+    "mouse",
+    "keyboard",
+    "touch",
+    "drag",
+    "events"
+  ],
   "author": "Jingwood <jingwood@unvell.com>",
   "license": "MIT",
-  "dependencies": {
-    "@babel/preset-env": "^7.18.9",
-    "@babel/runtime": "^7.9.2"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.9.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.9.5",
-    "@babel/plugin-transform-runtime": "^7.9.0",
-    "parcel": "^2.6.2"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jingwood/js-input-control.git"
   },
   "bugs": {
     "url": "https://github.com/jingwood/js-input-control/issues"

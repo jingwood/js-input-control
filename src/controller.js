@@ -5,11 +5,11 @@
 // MIT License (C) 2015-2020 Jingwood, unvell.com, all rights reserved.
 ////////////////////////////////////////////////////////////////////////////////
 
-import { MouseAgent, MouseButtons } from "./mouse";
+import { MouseAgent, MouseButtons } from "./mouse.js";
 import { EventDispatcher } from "./event.js";
-import { OperationModes } from "./defines";
-import { KeyboardAgent, Keys, FunctionKeys } from "./keyboard";
-import { TouchAgent } from "./touches";
+import { OperationModes } from "./defines.js";
+import { KeyboardAgent, Keys, FunctionKeys } from "./keyboard.js";
+import { TouchAgent } from "./touches.js";
 
 const defaultOptions = {
   elementId: undefined,
